@@ -17,6 +17,7 @@ const PomodoroTimer = () => {
 
     useEffect(() => {
         if (timeLeft === 0) {
+            new Audio("/alarm.mp3").play();
             setMode((prev) => (prev === "pomodoro" ? "break" : "pomodoro"));
             setTimeLeft(mode === "pomodoro" ? 5 * 60 : 25 * 60);
             setIsRunning(false); 
