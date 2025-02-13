@@ -38,7 +38,10 @@ const PomodoroTimer = () => {
         const secs = seconds % 60;
         return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
     };
-
+    useEffect(() => {
+        document.title = `${formatTime(timeLeft)} - Pomodoro Timer`;
+    }
+    , [timeLeft]);
     return (
         <div>
         <h1>Pomodoro Timer</h1>
