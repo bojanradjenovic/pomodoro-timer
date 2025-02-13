@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 
 const PomodoroTimer = () => {
     const [mode, setMode] = useState("pomodoro"); // "pomodoro" or "break"
@@ -14,7 +14,7 @@ const PomodoroTimer = () => {
 
         return () => clearInterval(timer);
     }, [isRunning]);
-
+    
     useEffect(() => {
         if (timeLeft === 0) {
             new Audio("/alarm.mp3").play();
@@ -23,7 +23,16 @@ const PomodoroTimer = () => {
             setIsRunning(false); 
         }
     }, [timeLeft]);
-
+    useEffect(() => {
+        if(Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    });
+    useEffect(() => {
+        if(timeLeft === 0 && Notification.permission === "granted") {
+            new Notification(mode === "pomodoro" ? "Break time! :3" : "Focus time!");
+        }
+    }, [timeLeft]);
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
