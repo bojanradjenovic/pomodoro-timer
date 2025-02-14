@@ -8,6 +8,7 @@ const PomodoroTimer = () => {
     const [newTask, setNewTask] = useState("");
     const [pomodorosNeeded, setPomodorosNeeded] = useState(1);
     const [activeTask, setActiveTask] = useState(null);
+    
     useEffect(() => {
         if (!isRunning) return;
 
@@ -33,21 +34,35 @@ const PomodoroTimer = () => {
               }
             }
     }, [timeLeft]);
+
     useEffect(() => {
         if(Notification.permission !== "granted") {
             Notification.requestPermission();
         }
     });
+
     useEffect(() => {
         if(timeLeft === 0 && Notification.permission === "granted") {
             new Notification(mode === "pomodoro" ? "Break time! :3" : "Focus time!");
         }
     }, [timeLeft]);
+
+    useEffect(() => {
+        const savedTasks = localStorage.getItem("tasks");
+        if(savedTasks){
+            setTasks(JSON.parse(savedTasks));
+        }
+    }, []);
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+    , [tasks]);
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
     };
+
     const addTask = () => {
         if(newTask.trim === "" || pomodorosNeeded < 1) return;
         setTasks([...tasks, {name: newTask, pomodorosLeft: pomodorosNeeded, completed: false}]);
@@ -55,6 +70,7 @@ const PomodoroTimer = () => {
         setPomodorosNeeded(1);
 
     };
+
     const toggleTaskCompletion = (index) => {
         setTasks((prevTasks) =>
           prevTasks.map((task, i) => (i === index ? { ...task, completed: !task.completed } : task))
@@ -63,6 +79,7 @@ const PomodoroTimer = () => {
     const startTask = (index) => {
         setActiveTask(index);
     };
+
     useEffect(() => {
         document.title = `${formatTime(timeLeft)} - Pomodoro Timer`;
     }
