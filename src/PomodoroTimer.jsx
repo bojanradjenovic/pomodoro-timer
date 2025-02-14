@@ -4,7 +4,10 @@ const PomodoroTimer = () => {
     const [mode, setMode] = useState("pomodoro"); // "pomodoro" or "break"
     const [timeLeft, setTimeLeft] = useState(25 * 60);
     const [isRunning, setIsRunning] = useState(false);
-
+    const [tasks, setTasks] = useState([]);
+    const [newTask, setNewTask] = useState("");
+    const [pomodorosNeeded, setPomodorosNeeded] = useState(1);
+    const [activeTask, setActiveTask] = useState(null);
     useEffect(() => {
         if (!isRunning) return;
 
@@ -20,8 +23,15 @@ const PomodoroTimer = () => {
             new Audio("/alarm.mp3").play();
             setMode((prev) => (prev === "pomodoro" ? "break" : "pomodoro"));
             setTimeLeft(mode === "pomodoro" ? 5 * 60 : 25 * 60);
-            setIsRunning(false); 
-        }
+            setIsRunning(false);
+            if (activeTask !== null) {
+                setTasks((prevTasks) =>
+                  prevTasks.map((task, index) =>
+                    index === activeTask ? { ...task, pomodorosLeft: Math.max(task.pomodorosLeft - 1, 0) } : task
+                  )
+                );
+              }
+            }
     }, [timeLeft]);
     useEffect(() => {
         if(Notification.permission !== "granted") {
@@ -37,6 +47,21 @@ const PomodoroTimer = () => {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+    };
+    const addTask = () => {
+        if(newTask.trim === "" || pomodorosNeeded < 1) return;
+        setTasks([...tasks, {name: newTask, pomodorosLeft: pomodorosNeeded, completed: false}]);
+        setNewTask("");
+        setPomodorosNeeded(1);
+
+    };
+    const toggleTaskCompletion = (index) => {
+        setTasks((prevTasks) =>
+          prevTasks.map((task, i) => (i === index ? { ...task, completed: !task.completed } : task))
+        );
+      };
+    const startTask = (index) => {
+        setActiveTask(index);
     };
     useEffect(() => {
         document.title = `${formatTime(timeLeft)} - Pomodoro Timer`;
@@ -59,6 +84,32 @@ const PomodoroTimer = () => {
         >
         Reset
         </button>
+        <h2>Tasks</h2>
+        <input
+        type="text"
+        placeholder="Task name"
+        value={newTask}
+        onChange={(e) => setNewTask(e.target.value)} 
+        />
+        <input
+        type="number"
+        min="1"
+        value={pomodorosNeeded}
+        onChange={(e) => setPomodorosNeeded(Number(e.target.value))}
+        />
+        <button onClick={addTask}>Add Task</button>
+
+        <ul>
+        {tasks.map((task, index) => (
+          <li key={index} style={{ textDecoration: task.completed ? "line-through" : "none" }}>
+            <input type="checkbox" checked={task.completed} onChange={() => toggleTaskCompletion(index)} />
+            {task.name} - {task.pomodorosLeft} Pomodoros Left
+            {!task.completed && (
+              <button onClick={() => startTask(index)}>Focus</button>
+            )}
+          </li>
+        ))}
+        </ul>
         </div>
     );
 };
