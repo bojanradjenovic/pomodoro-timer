@@ -8,7 +8,7 @@ const PomodoroTimer = () => {
     const [newTask, setNewTask] = useState("");
     const [pomodorosNeeded, setPomodorosNeeded] = useState(1);
     const [activeTask, setActiveTask] = useState(null);
-    
+
     useEffect(() => {
         if (!isRunning) return;
 
@@ -70,7 +70,11 @@ const PomodoroTimer = () => {
         setPomodorosNeeded(1);
 
     };
-
+    
+    const deleteTask = (index) => {
+        setTasks((prevTasks) => prevTasks.filter((_, i) => i !== index));
+    };
+    
     const toggleTaskCompletion = (index) => {
         setTasks((prevTasks) =>
           prevTasks.map((task, i) => (i === index ? { ...task, completed: !task.completed } : task))
@@ -124,6 +128,7 @@ const PomodoroTimer = () => {
             {!task.completed && (
               <button onClick={() => startTask(index)}>Focus</button>
             )}
+            <button onClick={() => deleteTask(index)}>Delete</button>
           </li>
         ))}
         </ul>
