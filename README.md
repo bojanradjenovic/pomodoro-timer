@@ -1,8 +1,40 @@
-# React + Vite
+# Pomodoro Timer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple Pomodoro Timer built with React and Tailwind CSS, allowing users to manage tasks and focus sessions effortlessly.
 
-Currently, two official plugins are available:
+## Features
+- Start, pause, and reset the timer
+- Switch between Pomodoro and break mode
+- Task management (add, complete, delete tasks)
+- Local storage support to save tasks
+- Notification support
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
+- React
+- Tailwind CSS
+- Vite (for development and bundling)
+
+## Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/bojanradjenovic/pomodoro-timer.git
+   cd pomodoro-timer
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+## Running the Project
+To start the development server:
+```sh
+npm run dev
+```
+
+## Building for Production
+To create a production build:
+```sh
+npm run build
+```
