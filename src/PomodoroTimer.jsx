@@ -1,4 +1,5 @@
 import React, { useState, useEffect, use } from "react";
+import './PomodoroTimer.css'
 const PomodoroTimer = () => {
     const [mode, setMode] = useState("pomodoro"); // "pomodoro" or "break"
     const [timeLeft, setTimeLeft] = useState(25 * 60);
