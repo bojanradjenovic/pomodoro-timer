@@ -1,7 +1,6 @@
 # Pomodoro Timer
 
-A simple Pomodoro Timer built with React and Tailwind CSS, allowing users to manage tasks and focus sessions effortlessly.
-
+A simple Pomodoro Timer built with React and Tailwind CSS, allowing users to manage tasks and focus sessions effortlessly. This project was created as a way to learn React and Tailwind.
 ## Features
 - Start, pause, and reset the timer
 - Switch between Pomodoro and break mode
